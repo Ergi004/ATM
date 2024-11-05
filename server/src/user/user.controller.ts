@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class UserController {
@@ -30,7 +31,7 @@ export class UserController {
       if (existingUser) {
         throw new Error(`User ${createUserDto.userName} already exists`);
       }
-      const createdUser = this.userService.register(createUserDto);
+      const createdUser = await this.userService.register(createUserDto);
       return createdUser;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -40,9 +41,14 @@ export class UserController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return req.user;
+    return { message: 'Login successful', user: req.user };
   }
 
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    res.clearCookie('access_token');
+    return res.status(HttpStatus.OK).json({ message: 'Logout successful' });
+  }
   @Get()
   findAll() {
     return this.userService.findAll();
