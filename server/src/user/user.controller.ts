@@ -1,71 +1,45 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Request,
-  HttpException,
-  HttpStatus,
-  UseGuards,
-  Res,
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { Controller, Post, Body, Res, Get, UseGuards } from '@nestjs/common';
+import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
-    try {
-      const existingUser = await this.userService.findOneBy(
-        createUserDto.email,
-      );
-      if (existingUser) {
-        throw new Error(`User ${createUserDto.userName} already exists`);
-      }
-      const createdUser = await this.userService.register(createUserDto);
-      return createdUser;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+  async register(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<Omit<User, 'password'>> {
+    return this.authService.register(createUserDto);
   }
 
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return { message: 'Login successful', user: req.user };
+  async login(
+    @Body() req,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    const { access_token } = await this.authService.login(req);
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
+    res.send({ message: 'Login successful' });
   }
 
   @Post('logout')
-  async logout(@Res() res: Response) {
+  logout(@Res() res: Response): void {
     res.clearCookie('access_token');
-    return res.status(HttpStatus.OK).json({ message: 'Logout successful' });
-  }
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+    res.send({ message: 'Logout successful' });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get('check-auth')
+  checkAuth(): { isAuthenticated: boolean } {
+    return { isAuthenticated: true };
   }
 }

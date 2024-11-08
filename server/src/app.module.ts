@@ -9,11 +9,11 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '.env.development.local', '.env.development'],
     }),
+    UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,

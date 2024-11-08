@@ -4,7 +4,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -15,19 +14,15 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
   ) {}
-  async register(createUserDto: CreateUserDto) {
-    const { password, ...rest } = createUserDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = this.usersRepository.create({
-      password: hashedPassword,
-      ...rest,
-    });
-    return this.usersRepository.save(newUser);
+
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = this.usersRepository.create(createUserDto);
+    return await this.usersRepository.save(user);
   }
 
-  async login(loginCredentials: CreateUserDto) {
+  async login(loginCredentials: CreateUserDto): Promise<User> {
     const { email, password } = loginCredentials;
     const existingUser = await this.usersRepository.findOneBy({ email });
 
@@ -39,7 +34,6 @@ export class UserService {
       password,
       existingUser.password,
     );
-
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid email or password');
     }
@@ -47,22 +41,25 @@ export class UserService {
     return existingUser;
   }
 
-  async findOneBy(userCredentials: string) {
-    return await this.usersRepository.findOneBy({ email: userCredentials });
-  }
-  async findAll() {
-    return await this.usersRepository.find();
-  }
-  findOne(id: number) {
-    return this.usersRepository.findOneBy({ id });
+  async findOneBy(email: string): Promise<User | null> {
+    return await this.usersRepository.findOneBy({ email });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.usersRepository.update(id, updateUserDto);
-    if (!user) {
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find();
+  }
+
+  async findOne(id: number): Promise<User | null> {
+    return await this.usersRepository.findOneBy({ id });
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    await this.usersRepository.update(id, updateUserDto);
+    const updatedUser = await this.findOne(id);
+    if (!updatedUser) {
       throw new NotFoundException('User not found');
     }
-    return this.usersRepository.save(Object.assign(user, updateUserDto));
+    return updatedUser;
   }
 
   async remove(id: number): Promise<void> {
