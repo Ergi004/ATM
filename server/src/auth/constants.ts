@@ -1,1 +1,1 @@
-export const jwtConstants = 'JWT_SECRET';
+export const jwtConstants = 'okej';

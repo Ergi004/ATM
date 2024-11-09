@@ -18,7 +18,6 @@ export const Login = () => {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("futet?");
     e.preventDefault();
     const response = await Auth.login({ email, password });
     if (!(response instanceof Error)) {

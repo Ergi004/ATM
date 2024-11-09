@@ -26,7 +26,7 @@ export const Auth = {
 
   async checkAuth() {
     try {
-      await axios.get("/auth/check-auth");
+      return await axios.get("/auth/check-auth");
     } catch {
       return false;
     }
