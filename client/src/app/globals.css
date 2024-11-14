@@ -1,16 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Krona+One&display=swap");
+
+* {
+  font-family: "Rubik Mono One", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
 
 :root {
   --primary: #ffffff;
-  --secondary: #f21919;
+  --secondary: #d62631;
+  --secondary-dark: #b6121d;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --primary: #ffffff;
-    --secondary: #f21919;
+    --secondary: #d62631;
+    --secondary-dark: #b6121d;
   }
 }
 

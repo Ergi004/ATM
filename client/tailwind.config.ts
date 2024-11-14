@@ -16,6 +16,7 @@ const config: Config = {
         foreground: "var(--foreground)",
         primary: "var(--primary)",
         secondary: "var(--secondary)",
+        secondaryDark: "var(--secondary-dark)",
       },
       borderRadius: {
         lg: "var(--radius)",

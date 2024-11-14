@@ -1,8 +1,8 @@
 export class CreateUserDto {
-    id: number;
-    userName: string;
-    phoneNumber: number; 
-    email: string;
-    password: string;
-    role: 'Admin' |"SimpleUser"
+  id: number;
+  userName: string;
+  phoneNumber: string;
+  email: string;
+  password: string;
+  role: 'Admin' | 'SimpleUser';
 }

@@ -1,12 +1,9 @@
-"use client";
-
+import { Register } from "@/components/Register/Register";
 import React from "react";
 import Image from "next/image";
-
-import { Login } from "@/components/Login/Login";
 import { Footer } from "@/components/Footer/Footer";
 
-const LoginPage = () => {
+const page = () => {
   return (
     <>
       <Image
@@ -17,11 +14,11 @@ const LoginPage = () => {
         alt=""
       />
       <div className="flex min-h-screen container mx-auto">
-        <Login />
+        <Register />
       </div>
       <Footer />
     </>
   );
 };
 
-export default LoginPage;
+export default page;

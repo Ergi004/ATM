@@ -1,10 +1,6 @@
 import axios from "./axios";
-import { UserCredentials } from "./types";
+import { UserCredentials, UserLogin } from "./types";
 
-interface UserLogin {
-  email: string;
-  password: string;
-}
 export const Auth = {
   async register(userCredentials: UserCredentials) {
     try {

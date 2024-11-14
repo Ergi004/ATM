@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
@@ -12,25 +13,57 @@ const icons = [
   <FaFacebook color="blue" key="facebook" />,
 ];
 
-export const Login = () => {
+export const Register = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await Auth.login({ email, password });
+    const response = await Auth.register({
+      username,
+      phoneNumber,
+      email,
+      password,
+    });
+    console.log(response);
     if (!(response instanceof Error)) {
-      router.push("/dashboard");
+      router.push("/login");
     } else {
-      alert("Login failed");
+      alert("register failed");
     }
   };
   return (
-    <div className="h-full m-auto max-w-2xl bg-secondary shadow-lg flex flex-col px-14 py-9 rounded">
+    <div className="h-full mx-auto mt-12 max-w-4xl bg-secondary shadow-lg flex flex-col px-14 py-9 rounded">
       <div className="max-w-96 w-full flex flex-col m-auto py-6">
-        <h1 className="font-bold mt-auto text-primary text-3xl">Login</h1>
+        <h1 className="font-bold mt-auto text-primary text-3xl">Register</h1>
         <form onSubmit={handleSubmit} className="mt-10 w-full mb-2 space-y-6">
+          <div className="w-full flex flex-col space-y-3">
+            <label className="w-full font-semibold text-white" htmlFor="text">
+              User Name*
+            </label>
+            <input
+              placeholder="User Name"
+              type="text"
+              className="text-black px-3 py-2 w-full rounded-lg border-0"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="w-full flex flex-col space-y-3">
+            <label className="w-full font-semibold text-white" htmlFor="text">
+              Phone Number
+            </label>
+            <input
+              placeholder="Phone Number"
+              type="text"
+              className="text-black  px-3 py-2 w-full rounded-lg border-0"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
           <div className="w-full flex flex-col space-y-3">
             <label className="w-full  font-semibold text-white" htmlFor="text">
               Email*
@@ -44,7 +77,7 @@ export const Login = () => {
             />
           </div>
           <div className="w-full flex flex-col space-y-3">
-            <label className="w-full  font-semibold text-white" htmlFor="text">
+            <label className="w-full font-semibold text-white" htmlFor="text">
               Password*
             </label>
             <input
@@ -63,7 +96,7 @@ export const Login = () => {
               type="submit"
               className="text-secondary font-semibold hover:bg-gray-200 bg-white "
             >
-              Login
+              Register
             </Button>
           </div>
         </form>
@@ -74,16 +107,16 @@ export const Login = () => {
           {icons.map((icon, index) => (
             <div
               key={`icon-${index}`}
-              className="h-12 w-24 py-1 px-4 bg-white  rounded-full justify-center flex items-center"
+              className="h-12 w-24 py-1 px-4 bg-white rounded-full justify-center flex items-center"
             >
               {icon}
             </div>
           ))}
         </div>
         <span className="mx-auto mt-4 text-primary">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold cursor-pointer">
-            Register Now
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold cursor-pointer">
+            Login Now
           </Link>
         </span>
       </div>

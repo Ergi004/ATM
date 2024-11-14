@@ -1,8 +1,10 @@
 export interface UserCredentials {
-  id: number;
   username: string;
   email: string;
-  phoneNumber: number;
+  phoneNumber: string;
   password: string;
-  role?: "SimpleUser" | "Admin";
+}
+export interface UserLogin {
+  email: string;
+  password: string;
 }
