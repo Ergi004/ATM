@@ -23,9 +23,5 @@ export const Dashboard = () => {
 
   if (!isAuthenticated) return null;
 
-  return (
-    <div>
-      <h1>You are authenticated</h1>
-    </div>
-  );
+  return <div className="min-h-screen"></div>;
 };

@@ -16,7 +16,7 @@ const LoginPage = () => {
         src="/images/bg.png"
         alt=""
       />
-      <div className="flex min-h-screen container mx-auto">
+      <div className="flex min-h-screen px-6 container mx-auto">
         <Login />
       </div>
       <Footer />

@@ -13,7 +13,7 @@ const page = () => {
         src="/images/bg.png"
         alt=""
       />
-      <div className="flex min-h-screen container mx-auto">
+      <div className="flex min-h-screen container mx-auto px-6">
         <Register />
       </div>
       <Footer />

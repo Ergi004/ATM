@@ -5,18 +5,21 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
-  username: string;
+  @Column({ name: 'firstName', nullable: false })
+  firstName: string;
 
-  @Column()
+  @Column({ name: 'lastName', nullable: false })
+  lastName: string;
+
+  @Column({ name: 'phoneNumber', nullable: true })
   phoneNumber: string;
 
-  @Column()
+  @Column({ name: 'email', nullable: false })
   email: string;
 
-  @Column()
+  @Column({ name: 'password', nullable: false })
   password: string;
 
-  @Column({ default: 'SimpleUser' })
+  @Column({ name: 'role', default: 'SimpleUser', nullable: false })
   role: 'Admin' | 'SimpleUser';
 }
