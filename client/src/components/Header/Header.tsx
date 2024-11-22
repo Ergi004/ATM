@@ -7,7 +7,7 @@ import React, { useState } from "react";
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const headings = ["Home", "About", "Contact", "Services"];
+  const headings = ["Home", "About", "Contact"];
 
   if (typeof window !== "undefined") {
     window.document.body.style.overflow = isOpen ? "hidden" : "auto";
@@ -71,10 +71,7 @@ export const Header = () => {
             <div className="space-y-3 flex flex-col">
               {headings.map((heading, idx) => (
                 <Link
-                  className={clsx(
-                    "border-b border-gray-400 pb-3",
-                    idx === 3 && "border-none"
-                  )}
+                  className={clsx("border-b border-gray-400 pb-3")}
                   key={`${heading}-${idx}`}
                   href="/"
                 >
@@ -87,6 +84,19 @@ export const Header = () => {
                   </span>
                 </Link>
               ))}
+              <Link
+                className={clsx("border-b border-gray-400 pb-3", "border-none")}
+                key={`Login-4`}
+                href="/login"
+              >
+                <span
+                  className={clsx(
+                    "block hover:text-secondary font-semibold text-gray-600"
+                  )}
+                >
+                  Login
+                </span>
+              </Link>
             </div>
           </nav>
         </div>

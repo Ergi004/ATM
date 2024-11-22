@@ -48,11 +48,12 @@ export const Register = () => {
     { setSubmitting }: FormikHelpers<RegisterFormValues>
   ) => {
     setSubmitting(true);
+    console.log(values);
     const response = await Auth.register(values);
     if (!(response instanceof Error)) {
       router.push("/login");
     } else {
-      alert("Register failed");
+      return new Error("Register failed");
     }
     setSubmitting(false);
   };

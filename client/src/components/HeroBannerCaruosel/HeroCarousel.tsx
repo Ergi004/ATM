@@ -60,7 +60,7 @@ export function HeroCarousel() {
             key={`Carousel-el-login`}
           >
             <div className="relative w-full items-center h-full justify-center flex">
-              <div className="bg-white w-full sm:w-3/5 lg:w-2/5 sm:p-8 px-6 pt-6 sm:absolute left-12 rounded-lg flex flex-col max-sm:h-60">
+              <div className="bg-white w-full sm:w-3/5 lg:w-2/5 sm:p-8 px-6 pt-6 sm:absolute left-8  lg:left-24 rounded-lg flex flex-col max-sm:h-60">
                 <div className="flex flex-col w-full">
                   <span className="text-xl lg:text-2xl  font-semibold">
                     Your Trusted Partner for Financial Growth
@@ -86,7 +86,7 @@ export function HeroCarousel() {
                     you.
                   </p>
                 </div>
-                <Link href="/register">
+                <Link className="mt-auto" href="/register">
                   <Button className="w-full mt-auto sm:mt-4 bg-secondary hover:bg-secondary/80">
                     Register now
                   </Button>
@@ -103,7 +103,7 @@ export function HeroCarousel() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      <div className="flex sm:hidden -translate-y-4 justify-center  w-full max-w-4xl">
+      <div className="flex sm:hidden translate-y-4 justify-center  w-full max-w-4xl">
         {carouselElements.map((el, index) => (
           <div
             onClick={() => handleClick(index)}
