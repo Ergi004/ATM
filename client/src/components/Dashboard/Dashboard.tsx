@@ -36,7 +36,7 @@ export const Dashboard = () => {
     <div className="min-h-screen relative flex bg-[#d62631]/10 ">
       <div
         className={clsx(
-          "bg-white min-h-screen h-full w-full sm:w-72 lg:w-80 px-4  max-lg:absolute max-lg:-translate-x-full top-0  bottom-0 transition-all duration-500 ease-out z-50",
+          "bg-white min-h-screen w-full sm:w-72 lg:w-96 px-4  max-lg:fixed max-lg:-translate-x-full top-0  bottom-0 transition-all duration-500 ease-out z-50",
           isOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"
         )}
       >

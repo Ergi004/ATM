@@ -9,3 +9,9 @@ export interface UserLogin {
   email: string;
   password: string;
 }
+
+export interface BankAccounts {
+  userId: number;
+  balance: number;
+  accountType: "Deposit" | "Savings";
+}

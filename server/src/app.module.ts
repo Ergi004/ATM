@@ -6,6 +6,10 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { User } from './user/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { BankAccModule } from './bank-acc/bank-acc.module';
+import { BankAcc } from './bank-acc/entities/bank-acc.entity';
+import { TransactionHistoryModule } from './transaction-history/transaction-history.module';
+import { TransactionHistory } from './transaction-history/entities/transaction-history.entity';
 
 @Module({
   imports: [
@@ -21,10 +25,12 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, BankAcc, TransactionHistory],
       synchronize: true,
     }),
     AuthModule,
+    BankAccModule,
+    TransactionHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { BankAcc } from '../../bank-acc/entities/bank-acc.entity'; // Import the BankAcc entity
+import { TransactionHistory } from 'src/transaction-history/entities/transaction-history.entity';
 
 @Entity()
 export class User {
@@ -22,4 +24,13 @@ export class User {
 
   @Column({ name: 'role', default: 'SimpleUser', nullable: false })
   role: 'Admin' | 'SimpleUser';
+
+  @OneToMany(() => BankAcc, (bankAcc) => bankAcc.userId)
+  bankAccounts: BankAcc[];
+
+  @OneToMany(
+    () => TransactionHistory,
+    (transactionsHistory) => transactionsHistory.userId,
+  )
+  transactions: TransactionHistory[];
 }
