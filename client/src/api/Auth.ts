@@ -14,7 +14,6 @@ export const Auth = {
   async login(userCredentials: UserLogin) {
     try {
       const response = await axios.post("/auth/login", userCredentials);
-      console.log("arditi", userCredentials);
       return response;
     } catch {
       return new Error("Login failed");

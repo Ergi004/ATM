@@ -8,25 +8,27 @@ import { SideMenu } from "./SideMenu";
 import { DashboardHeader } from "./DashboardHeader";
 import clsx from "clsx";
 import { Overview } from "./Overview";
+import { useSearchParams } from "next/navigation";
+import { BankAccounts } from "./BankAccounts";
+import { TransactionTable } from "./TransactionTable";
 
 export const Dashboard = () => {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
+
+  const currentPage = searchParams.get("page");
   useEffect(() => {
     const checkAuthStatus = async () => {
       const authStatus = await Auth.checkAuth();
       if (!authStatus) {
         router.push("/login");
-      } else {
-        setIsAuthenticated(true);
       }
     };
 
     checkAuthStatus();
   }, []);
 
-  if (!isAuthenticated) return null;
   if (isOpen) {
     document.body.style.overflow = "hidden";
   } else {
@@ -70,7 +72,16 @@ export const Dashboard = () => {
           <div className="lg:hidden absolute top-0 bottom-0 right-0 bg-black/40 left-0 z-40" />
         )}
         <DashboardHeader isOpen={isOpen} setIsOpen={setIsOpen} />
-        <Overview />
+        {(currentPage === "overview" || currentPage == null) && <Overview />}
+        {currentPage === "deposit-account" && <BankAccounts />}
+        {currentPage === "savings-account" && <BankAccounts />}
+        {currentPage === "transaction-history" && (
+          <div className="flex flex-col pb-10 mt-10 md:px-8 px-4 lg:px-10 w-full">
+            <div className="col-span-12 rounded-xl border border-stroke bg-white shadow-md p-6">
+              <TransactionTable />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
