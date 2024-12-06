@@ -4,10 +4,14 @@ import { Response } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Controller('auth')
 export class UserController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post('register')
   async register(
@@ -16,18 +20,22 @@ export class UserController {
     return this.authService.register(createUserDto);
   }
 
-  // @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
     @Body() req,
     @Res({ passthrough: true }) res: Response,
   ): Promise<void> {
-    const { access_token } = await this.authService.login(req);
+    const { access_token } = await this.authService.login(
+      req.email,
+      req.password,
+      req.id,
+    );
     res.cookie('access_token', access_token, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
     });
+
     res.send({ message: 'Login successful' });
   }
 

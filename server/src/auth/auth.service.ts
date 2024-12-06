@@ -27,7 +27,6 @@ export class AuthService {
     }
     return null;
   }
-
   async register(
     createUserDto: CreateUserDto,
   ): Promise<Omit<User, 'password'>> {
@@ -36,7 +35,6 @@ export class AuthService {
       throw new ConflictException('User already exists');
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const newUser = await this.userService.create({
       ...createUserDto,
@@ -46,9 +44,27 @@ export class AuthService {
     const { password, ...result } = newUser;
     return result;
   }
+  async login(
+    email: string,
+    password: string,
+    id: number,
+  ): Promise<{ access_token: string }> {
+    const existingUser = await this.userService.findOneBy(email);
 
-  async login(user: Omit<User, 'password'>): Promise<{ access_token: string }> {
-    const payload = { username: user.email, sub: user.id };
+    if (!existingUser) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password,
+    );
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const payload = { username: email, sub: id };
+
     return {
       access_token: this.jwtService.sign(payload),
     };
