@@ -69,7 +69,10 @@ export const Dashboard = () => {
       </div>
       <div className="flex flex-col relative w-full">
         {isOpen && (
-          <div className="lg:hidden absolute top-0 bottom-0 right-0 bg-black/40 left-0 z-40" />
+          <div
+            onClick={() => setIsOpen(false)}
+            className="lg:hidden absolute top-0 bottom-0 right-0 bg-black/40 backdrop-blur-sm	 left-0 z-40"
+          />
         )}
         <DashboardHeader isOpen={isOpen} setIsOpen={setIsOpen} />
         {(currentPage === "overview" || currentPage == null) && <Overview />}

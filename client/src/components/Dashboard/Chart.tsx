@@ -33,12 +33,16 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function Chart() {
+interface ChartProps {
+  title: "Savings account" | "Deposit account" | false;
+  description?: string;
+}
+export function Chart({ title, description }: ChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart - Linear</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
