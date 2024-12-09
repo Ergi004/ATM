@@ -5,14 +5,19 @@ export const AccountApi = {
   async create(accountCredentials: BankAccounts) {
     try {
       const response = await axios.post("/bank-acc/create", accountCredentials);
-      console.log(response);
       return response;
     } catch {
-      return new Error("User did not register");
+      return new Error("Bank account creation failed");
     }
   },
-
-  //   async delete() {
-  //     await axios.post("/auth/logout", {}, { withCredentials: true });
-  //   },
+  async getUserAccounts(userId: number) {
+    try {
+      const response = await axios.get(
+        `/bank-acc/getAccountsByUserId/${userId}`
+      );
+      return response.data;
+    } catch {
+      return new Error("Cannot get bank accounts");
+    }
+  },
 };

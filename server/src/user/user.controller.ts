@@ -25,6 +25,8 @@ export class UserController {
     @Body() req,
     @Res({ passthrough: true }) res: Response,
   ): Promise<void> {
+    const existingUser = await this.userService.findOneBy(req.email);
+
     const { access_token } = await this.authService.login(
       req.email,
       req.password,
@@ -36,7 +38,7 @@ export class UserController {
       sameSite: 'lax',
     });
 
-    res.send({ message: 'Login successful' });
+    res.send({ message: 'Login successful', user: existingUser });
   }
 
   @Post('logout')

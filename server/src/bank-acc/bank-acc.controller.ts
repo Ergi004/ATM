@@ -35,6 +35,11 @@ export class BankAccController {
     );
   }
 
+  @Get('getAccountsByUserId/:id')
+  findByUserId(@Param() userId: number) {
+    return this.bankAccService.findByUserId(+userId);
+  }
+
   @Get()
   findAll() {
     return this.bankAccService.findAll();

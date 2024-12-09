@@ -44,11 +44,7 @@ export class AuthService {
     const { password, ...result } = newUser;
     return result;
   }
-  async login(
-    email: string,
-    password: string,
-    id: number,
-  ): Promise<{ access_token: string }> {
+  async login(email: string, password: string, id: number) {
     const existingUser = await this.userService.findOneBy(email);
 
     if (!existingUser) {

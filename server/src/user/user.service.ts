@@ -22,25 +22,6 @@ export class UserService {
     return await this.usersRepository.save(user);
   }
 
-  async login(loginCredentials: CreateUserDto): Promise<User> {
-    const { email, password } = loginCredentials;
-    const existingUser = await this.usersRepository.findOneBy({ email });
-
-    if (!existingUser) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password,
-    );
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
-
-    return existingUser;
-  }
-
   async findOneBy(email: string): Promise<User | null> {
     return await this.usersRepository.findOneBy({ email });
   }

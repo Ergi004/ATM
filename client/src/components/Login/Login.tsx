@@ -38,6 +38,7 @@ export const Login = () => {
     const response = await Auth.login(values);
     if (!(response instanceof Error)) {
       router.push("/dashboard");
+      sessionStorage.setItem("userId", response.data.user.id);
     } else {
       alert("Login failed");
     }

@@ -15,6 +15,13 @@ export class BankAccService {
   ) {}
 
   async create(createBankAccDto: CreateBankAccDto) {
+    const userID = createBankAccDto.userId;
+    const bankAccounts = await this.accountRepository.findBy({
+      userId: userID,
+    });
+    if (bankAccounts.length >= 2)
+      throw new Error('User cannot have more than two bank account');
+
     const account = this.accountRepository.create(createBankAccDto);
     return await this.accountRepository.save(account);
   }
@@ -73,6 +80,10 @@ export class BankAccService {
     return updatedAccount;
   }
 
+  async findByUserId(userId: number) {
+    const bankAccounts = await this.accountRepository.findBy({ userId });
+    return bankAccounts;
+  }
   findAll() {
     return this.accountRepository.find();
   }
