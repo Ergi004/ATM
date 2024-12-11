@@ -5,6 +5,7 @@ import { BankAcc } from './entities/bank-acc.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TransactionHistoryService } from 'src/transaction-history/transaction-history.service';
+import { AccountHistoryService } from 'src/account-history/account-history.service';
 
 @Injectable()
 export class BankAccService {
@@ -12,6 +13,7 @@ export class BankAccService {
     @InjectRepository(BankAcc)
     private readonly accountRepository: Repository<BankAcc>,
     private readonly transactionHistoryService: TransactionHistoryService,
+    private readonly accountHistoryService: AccountHistoryService,
   ) {}
 
   async create(createBankAccDto: CreateBankAccDto) {
@@ -21,7 +23,6 @@ export class BankAccService {
     });
     if (bankAccounts.length >= 2)
       throw new Error('User cannot have more than two bank account');
-
     const account = this.accountRepository.create(createBankAccDto);
     return await this.accountRepository.save(account);
   }
@@ -30,7 +31,6 @@ export class BankAccService {
     const existingAccount = await this.accountRepository.findOneBy({
       accountId,
     });
-
     if (!existingAccount) throw new Error('Account not found');
 
     const updatedBalance = Number(existingAccount.balance) + Number(amount);
@@ -39,7 +39,14 @@ export class BankAccService {
       balance: updatedBalance,
       userId,
     };
+
     await this.accountRepository.update(accountId, updatedAccount);
+
+    // Record balance in history
+    await this.accountHistoryService.create({
+      accountId,
+      balance: updatedBalance,
+    });
 
     const transaction = {
       amount,
@@ -57,7 +64,6 @@ export class BankAccService {
     const existingAccount = await this.accountRepository.findOneBy({
       accountId,
     });
-
     if (!existingAccount) throw new Error('Account not found');
 
     const updatedBalance = Number(existingAccount.balance) - Number(amount);
@@ -66,7 +72,14 @@ export class BankAccService {
       balance: updatedBalance,
       userId,
     };
+
     await this.accountRepository.update(accountId, updatedAccount);
+
+    // Record balance in history
+    await this.accountHistoryService.create({
+      accountId,
+      balance: updatedBalance,
+    });
 
     const transaction = {
       amount,
@@ -79,7 +92,6 @@ export class BankAccService {
 
     return updatedAccount;
   }
-
   async findByUserId(userId: number) {
     const bankAccounts = await this.accountRepository.findBy({ userId });
     return bankAccounts;

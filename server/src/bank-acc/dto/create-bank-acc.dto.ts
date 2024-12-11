@@ -1,6 +1,6 @@
 export class CreateBankAccDto {
   accountId: number;
   balance: number;
-  accountType: 'Savings' | 'Deposit';
+  accountType: 'savings-account' | 'deposit-account';
   userId: number;
 }

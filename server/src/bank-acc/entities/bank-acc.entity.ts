@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity'; // Import the User entity
 import { TransactionHistory } from 'src/transaction-history/entities/transaction-history.entity';
+import { AccountBalance } from '../../account-history/entities/account-history.entity';
 
 @Entity()
 export class BankAcc {
@@ -16,8 +17,8 @@ export class BankAcc {
   @Column({ name: 'balance', nullable: false, type: 'decimal' })
   balance: number;
 
-  @Column({ name: 'accountType', default: 'Deposit', nullable: false })
-  accountType: 'Savings' | 'Deposit';
+  @Column({ name: 'accountType', nullable: false, default: 'savings-account' })
+  accountType: 'savings-account' | 'deposit-account';
 
   @ManyToOne(() => User, (user) => user.bankAccounts, { onDelete: 'CASCADE' })
   userId: number;
@@ -27,4 +28,7 @@ export class BankAcc {
     (transactionsHistory) => transactionsHistory.userId,
   )
   transactions: TransactionHistory[];
+
+  @OneToMany(() => AccountBalance, (balanceHistory) => balanceHistory.account)
+  balanceHistory: AccountBalance[];
 }

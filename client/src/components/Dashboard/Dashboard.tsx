@@ -11,11 +11,16 @@ import { Overview } from "./Overview";
 import { useSearchParams } from "next/navigation";
 import { BankAccounts } from "./BankAccounts";
 import { TransactionTable } from "./TransactionTable";
+import { AccountApi } from "@/api/BankAccount";
+import { IBankAccounts } from "@/api/types";
 
 export const Dashboard = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
+  const [bankAccounts, setBankAccounts] = useState<IBankAccounts[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const currentPage = searchParams.get("page");
   useEffect(() => {
@@ -27,6 +32,24 @@ export const Dashboard = () => {
     };
 
     checkAuthStatus();
+  }, []);
+
+  const userId = sessionStorage.getItem("userId");
+
+  const getAccounts = async () => {
+    try {
+      if (!userId) throw new Error("User ID is missing");
+      const response = await AccountApi.getUserAccounts(Number(userId));
+      setBankAccounts(response);
+    } catch {
+      setError("Failed to fetch accounts.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAccounts();
   }, []);
 
   if (isOpen) {
@@ -75,9 +98,23 @@ export const Dashboard = () => {
           />
         )}
         <DashboardHeader isOpen={isOpen} setIsOpen={setIsOpen} />
-        {(currentPage === "overview" || currentPage == null) && <Overview />}
-        {currentPage === "deposit-account" && <BankAccounts />}
-        {currentPage === "savings-account" && <BankAccounts />}
+        {(currentPage === "overview" || currentPage == null) && (
+          <Overview bankAccounts={bankAccounts} />
+        )}
+        {currentPage === "deposit-account" && (
+          <BankAccounts
+            bankAccounts={bankAccounts}
+            errorMsg={error}
+            loading={loading}
+          />
+        )}
+        {currentPage === "savings-account" && (
+          <BankAccounts
+            bankAccounts={bankAccounts}
+            errorMsg={error}
+            loading={loading}
+          />
+        )}
         {currentPage === "transaction-history" && (
           <div className="flex flex-col pb-10 mt-10 md:px-8 px-4 lg:px-10 w-full">
             <div className="col-span-12 rounded-xl border border-stroke bg-white shadow-md p-6">

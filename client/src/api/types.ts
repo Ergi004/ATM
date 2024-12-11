@@ -10,8 +10,8 @@ export interface UserLogin {
   password: string;
 }
 
-export interface BankAccounts {
+export interface IBankAccounts {
   userId: number;
   balance: number;
-  accountType: "Deposit" | "Savings";
+  accountType: "deposit-account" | "savings-account";
 }

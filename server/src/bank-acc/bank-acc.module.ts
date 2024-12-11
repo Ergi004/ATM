@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccService } from './bank-acc.service';
 import { BankAccController } from './bank-acc.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAcc } from './entities/bank-acc.entity';
-import { TransactionHistoryModule } from 'src/transaction-history/transaction-history.module';
+import { TransactionHistoryService } from 'src/transaction-history/transaction-history.service';
+import { TransactionHistory } from 'src/transaction-history/entities/transaction-history.entity';
+import { AccountHistoryModule } from '../account-history/account-history.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BankAcc]), TransactionHistoryModule],
+  imports: [
+    TypeOrmModule.forFeature([BankAcc, TransactionHistory]),
+    AccountHistoryModule,
+  ],
   controllers: [BankAccController],
-  providers: [BankAccService],
-  exports: [BankAccService],
+  providers: [BankAccService, TransactionHistoryService],
 })
 export class BankAccModule {}

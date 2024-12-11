@@ -5,8 +5,13 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { FiShoppingBag } from "react-icons/fi";
 import { Chart } from "./Chart";
 import { TransactionTable } from "./TransactionTable";
+import { IBankAccounts } from "@/api/types";
 
-export const Overview = () => {
+export const Overview = ({
+  bankAccounts,
+}: {
+  bankAccounts: IBankAccounts[];
+}) => {
   return (
     <div className="flex flex-col pb-10 mt-10 md:px-8 px-4 lg:px-10 w-full">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -76,8 +81,18 @@ export const Overview = () => {
         </div>
       </div>
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="col-span-12 border-stroke  2xl:col-span-8">
-          <Chart title="Deposit account" description="okej" />
+        <div className="col-span-12 flex flex-col border-stroke gap-y-6 2xl:col-span-8">
+          {bankAccounts.map((bankAccount, idx) => (
+            <Chart
+              key={`chart-${idx}`}
+              title={
+                bankAccount.accountType === "deposit-account"
+                  ? "Deposit account"
+                  : "Savings account"
+              }
+              description="okej"
+            />
+          ))}
         </div>
         <div className="col-span-12 rounded-xl border border-stroke bg-white shadow-md p-6  2xl:col-span-4">
           <TransactionTable />

@@ -10,6 +10,7 @@ import { BankAccModule } from './bank-acc/bank-acc.module';
 import { BankAcc } from './bank-acc/entities/bank-acc.entity';
 import { TransactionHistoryModule } from './transaction-history/transaction-history.module';
 import { TransactionHistory } from './transaction-history/entities/transaction-history.entity';
+import { AccountHistoryModule } from './account-history/account-history.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { TransactionHistory } from './transaction-history/entities/transaction-h
     AuthModule,
     BankAccModule,
     TransactionHistoryModule,
+    AccountHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
